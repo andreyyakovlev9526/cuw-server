@@ -10,7 +10,7 @@ exports.index = (_req, res) => {
 };
 
 exports.new = (req, res) => {
-  var song = new Song();
+  const song = new Song();
   song.title = req.body.title ? req.body.title : song.title;
   song.title_en = req.body.title_en;
   song.sheets = req.body.sheets;

@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-var songList_Schema = mongoose.Schema({
+const songList_Schema = mongoose.Schema({
 	songs: {
 		type: String,
 		required: true
@@ -18,7 +18,7 @@ var songList_Schema = mongoose.Schema({
 	}
 });
 
-var song_List = module.exports = mongoose.model('songList', songList_Schema);
+const song_List = module.exports = mongoose.model('songList', songList_Schema);
 module.exports.get = function (callback, limit) {
 	song_List.find(callback).limit(limit);
 }

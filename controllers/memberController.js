@@ -14,7 +14,7 @@ exports.index = (req, res) => {
 };
 
 exports.new = function (req, res) {
-	var member = new Member();
+	const member = new Member();
 	member.name = req.body.name ? req.body.name : member.name;
 	member.phone = req.body.phone;
 	member.skype = req.body.skype;

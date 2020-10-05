@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-var memberSchema = mongoose.Schema({
+const memberSchema = mongoose.Schema({
 	name: {
 		type: String,
 		required: true
@@ -24,7 +24,7 @@ var memberSchema = mongoose.Schema({
 	}
 });
 
-var Member = module.exports = mongoose.model('member', memberSchema);
+const Member = module.exports = mongoose.model('member', memberSchema);
 module.exports.get = function (callback, limit) {
 	Member.find(callback).limit(limit);
 }

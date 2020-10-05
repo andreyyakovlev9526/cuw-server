@@ -14,7 +14,7 @@ exports.index = function (req, res) {
 };
 
 exports.new = function (req, res) {
-	var songList = new song_List();
+	const songList = new song_List();
 	songList.songs = req.body.songs ? req.body.songs : songList.songs;
 	songList.date = req.body.date;
 	songList.note = req.body.note;

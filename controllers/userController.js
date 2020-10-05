@@ -10,7 +10,7 @@ exports.index = (_req, res) => {
 };
 
 exports.new = (req, res) => {
-	var user = new User();
+	const user = new User();
 	user.name = req.body.name ? req.body.name : user.name;
 	user.position = req.body.position;
 	user.email = req.body.email; ˇ

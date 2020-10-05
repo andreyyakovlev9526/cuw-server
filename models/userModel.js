@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SALT = 10;
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
 	name: {
 		type: String,
 		required: true
@@ -21,7 +21,7 @@ var userSchema = mongoose.Schema({
 	}
 });
 
-var user = this;
+let user = this;
 
 userSchema.methods.comparePassword = (candidatePassword, callBack) => {
 	bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
@@ -31,7 +31,7 @@ userSchema.methods.comparePassword = (candidatePassword, callBack) => {
 }
 
 userSchema.methods.generateToken = (callBack) => {
-	var token = jwt.sign(user._id.toHexString(), process.env.SECRETE);
+	const token = jwt.sign(user._id.toHexString(), process.env.SECRETE);
 	user.token = token;
 	user.save(function (err, user) {
 		if (err) return callBack(err)
@@ -48,7 +48,7 @@ userSchema.statics.findByToken = (token, callBack) => {
 	});
 }
 
-var User = module.exports = mongoose.model('user', userSchema);
+const User = module.exports = mongoose.model('user', userSchema);
 module.exports.get = function (callback, limit) {
 	User.find(callback).limit(limit);
 }
