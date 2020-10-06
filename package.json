@@ -2,14 +2,15 @@
   "name": "serverside-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@shelf/jest-mongodb": "^1.2.3",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "connect": "^3.7.0",
@@ -19,9 +20,17 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.0",
     "mongodb": "^3.6.2",
-    "mongoose": "^5.10.7"
+    "mongoose": "^5.10.8"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "cross-env": "^7.0.2",
+    "jest": "^26.5.0",
+    "mongodb-memory-server": "^6.9.0",
+    "nodemon": "^2.0.4",
+    "supertest": "^5.0.0"
+  },
+  "jest": {
+    "preset": "@shelf/jest-mongodb",
+    "testTimeout": 10000
   }
 }

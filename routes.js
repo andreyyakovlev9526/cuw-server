@@ -1,9 +1,9 @@
-const memberController = require('./controllers/memberController');
-const songController = require('./controllers/songController');
-const songList_Controller = require('./controllers/songList_Controller');
-const userController = require('./controllers/userController');
-const authController = require('./controllers/authController');
-const auth = require('./middleware/auth');
+const memberController = require('./src/controllers/memberController');
+const songController = require('./src/controllers/songController');
+const songList_Controller = require('./src/controllers/songList_Controller');
+const userController = require('./src/controllers/userController');
+const authController = require('./src/controllers/authController');
+const auth = require('./src/middleware/auth');
 
 const Router = require('express').Router();
 
@@ -43,10 +43,10 @@ Router.route('/user/:song_id')
 	.put(userController.update)
 	.delete(userController.delete);
 
-Router.route('/auth')
-	.post('/register', authController.registerUser)
-	.post('/login', authController.loginUser)
-	.get('/auth', auth, authController.getUserDetails)
-	.get('/logout', auth, authController.logoutUser);
+// Router.route('/auth')
+// 	.post('/register', authController.registerUser)
+// 	.post('/login', authController.loginUser)
+// 	.get('/auth', auth, authController.getUserDetails)
+// 	.get('/logout', auth, authController.logoutUser);
 
 module.exports = Router;
