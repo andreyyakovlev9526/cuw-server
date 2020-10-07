@@ -1,6 +1,6 @@
 const { User } = require('../models/userModel');
 
-exports.registerUser = async (req, res) => {
+exports.register = async (req, res) => {
   const user = new User(req.body);
 
   await user.save((err, _doc) => {
@@ -11,7 +11,7 @@ exports.registerUser = async (req, res) => {
   });
 };
 
-exports.loginUser = (req, res) => {
+exports.login = (req, res) => {
   User.findOne({ email: req.body.email }, (_err, user) => {
     if (!user) {
       return res.status(404).json({ message: 'User email not found!' });
@@ -37,7 +37,7 @@ exports.loginUser = (req, res) => {
   });
 };
 
-exports.logoutUser = (req, res) => {
+exports.logout = (req, res) => {
   User.findByIdAndUpdate(
     { _id: req.user._id },
     { token: '' },
@@ -50,7 +50,7 @@ exports.logoutUser = (req, res) => {
   );
 };
 
-exports.getUserDetails = (req, res) => {
+exports.getDetails = (req, res) => {
   return res.status(200).json({
     id: req.user._id,
     name: req.user.name,

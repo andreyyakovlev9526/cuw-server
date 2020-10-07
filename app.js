@@ -1,12 +1,14 @@
 const { auth } = require('./src/middleware/auth');
-let express = require('express'),
-	mongoose = require('mongoose'),
-	bodyParser = require('body-parser');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 	
-let apiRoutes = require("./routes")
+const apiRoutes = require("./routes")
 
-let app = express();
+const app = express();
 
+app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

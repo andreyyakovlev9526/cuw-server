@@ -38,15 +38,9 @@ Router.route('/song-list/:songList_id')
 Router.route('/user')
 	.get(userController.index)
 	.post(userController.new);
-Router.route('/user/:song_id')
+Router.route('/user/:user_id')
 	.get(userController.view)
 	.put(userController.update)
 	.delete(userController.delete);
-
-// Router.route('/auth')
-// 	.post('/register', authController.registerUser)
-// 	.post('/login', authController.loginUser)
-// 	.get('/auth', auth, authController.getUserDetails)
-// 	.get('/logout', auth, authController.logoutUser);
 
 module.exports = Router;

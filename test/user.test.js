@@ -4,9 +4,12 @@ const { MongoMemoryServer } = require("mongodb-memory-server");
 
 const Project = require('../src/models/userModel');
 const app = require('../app');
+let userId;
 
 describe('User', () => {
   let mongoServer;
+
+  // TODO: move to separate file
   beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
     const URI = await mongoServer.getUri();
@@ -23,112 +26,56 @@ describe('User', () => {
     await mongoServer.stop();
   });
 
-  afterEach(async () => {
-    const collections = await mongoose.connection.db.collections();
-
-    for (let collection of collections) {
-      await collection.deleteMany();
-    }
+  it('Get user index', async () => {
+    const res = await request(app)
+      .get('/api/user/')
   });
-  it('should create a new user', async () => {
+
+  it('Create a new user', async () => {
     const res = await request(app)
       .post('/api/user')
       .send({
-        name: "Sasha",
-        position: "bass",
-        email: "test@test.com",
-        password:'223ddsd'
+        name: 'Sasha',
+        position: 'bass',
+        email: 'test@test.com',
+        password: '223ddsd'
       })
     expect(res.statusCode).toEqual(200)
-    expect(res.body).toHaveProperty('email')
+    expect(res.body.name).toEqual('Sasha')
+    expect(res.body.position).toEqual('bass')
+    expect(res.body.email).toEqual('test@test.com')
+    userId = res.body._id;
   });
-  // it('should view user', async () => {
-  //   const res = await request(app)
-  //     .view('/api/user')
-  //     .send(app)
-  //   expect(res.statusCode).toEqual(200)
-  //   // expect(res.body).toHaveProperty('email')
-  // });
 
-  // it('should be able to create a project', async () => {
-  //   const response = await request(app)
-  //     .post('/projects')
-  //     .send({
-  //       name: "Sasha",
-  //       position: "bass",
-  //       email: "test@test.com"
-  //     })
+  it('View a user', async () => {
+    const res = await request(app)
+      .get('/api/user/' + userId)
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.name).toEqual('Sasha')
+    expect(res.body.email).toEqual('test@test.com')
+    expect(res.body.position).toEqual('bass')
+  });
+  
+  it('Update a user', async () => {
+    let res = await request(app)
+      .put('/api/user/' + userId)
+      .send({
+        name: 'Vitaliy',
+        position: 'guitar',
+        email: 'viteliytest@test.com',
+        password: '32245retyu'
+      })
+    expect(res.statusCode).toEqual(200)
 
-  //   expect(response.status).toBe(200);
-  // });
+    res = await request(app)
+      .get('/api/user/' + userId)
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.name).toEqual('Vitaliy')
+    expect(res.body.email).toEqual('viteliytest@test.com')
+    expect(res.body.position).toEqual('guitar')
+  });
 
-  // it('should not create a project if it has already been defined', async () => {
-  //   await request(app)
-  //     .post('/projects')
-  //     .send({
-  //       name: "Sasha",
-  //       position: "bass",
-  //       email: "test@test.com"
-  //     })
-
-  //   const response = await request(app)
-  //     .post('/projects')
-  //     .send({
-  //       name: "Sasha",
-  //       position: "bass",
-  //       email: "test@test.com"
-  //     });
-
-  //   expect(response.body).toMatchObject({ error: 'Duplicated project' });
-  // });
-
-  // it('should be able to list all projects', async () => {
-  //   const response = await request(app)
-  //     .get('/projects');
-
-  //   expect(response.status).toBe(200);
-  // });
+  it('Delete a user', async () => {
+    await request(app).delete('/api/user/' + userId)
+  });
 })
-
-// const request = require('supertest');
-// const app = require('../app');
-// const { MongoClient } = require('mongodb');
-
-// describe('insert', () => {
-//   let connection;
-//   let db;
-
-  // beforeAll(async () => {
-  //   connection = await MongoClient.connect(global.__MONGO_URI__, {
-  //     useNewUrlParser: true,
-  //     useUnifiedTopology: true
-  //   });
-  //   db = await connection.db(global.__MONGO_DB_NAME__);
-  // });
-
-  // afterAll(async () => {
-  //   await connection.close();
-  //   await db.close();
-  // });
-
-//   describe('User Endpoints', () => {
-//     it('should create a new user', async () => {
-//       const res = await request(app)
-//         .post('/api/user')
-//         .send({
-//           name: "Sasha",
-//           position: "bass",
-//           email: "test@test"
-//         })
-//       expect(res.statusCode).toEqual(200)
-//       expect(res.body).toHaveProperty('email')
-//     });
-//     it('should view user', async () => {
-//       const res = await request(app)
-//         .view('/api/user')
-//         .send(app)
-//       expect(res.statusCode).toEqual(200)
-//       // expect(res.body).toHaveProperty('email')
-//     });
-//   });
-// });
