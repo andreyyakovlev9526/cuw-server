@@ -3,7 +3,7 @@ const Song = require('../models/songModel');
 exports.index = (_req, res) => {
   Song.find({}, (err, songs) => {
     if (err) {
-      res.status(422).send('Failed to query DB');
+      return res.status(422).send('Failed to query DB: ' + err.message);
     }
     res.json(songs);
   });
@@ -11,14 +11,14 @@ exports.index = (_req, res) => {
 
 exports.new = (req, res) => {
   const song = new Song();
-  song.title = req.body.title ? req.body.title : song.title;
+  song.title = req.body.title;
   song.title_en = req.body.title_en;
   song.sheets = req.body.sheets;
   song.samples = req.body.samples;
 
   song.save(err => {
     if (err) {
-      res.status(422).send('Failed to update DB');
+      return res.status(422).send('Failed to update DB: ' + err.message);
     }
     res.json(song);
   });
@@ -27,7 +27,7 @@ exports.new = (req, res) => {
 exports.view = (req, res) => {
   Song.findById(req.params.song_id, (err, song) => {
     if (err) {
-      res.status(422).send('Failed to query DB');
+      return res.status(422).send('Failed to query DB: ' + err.message);
     }
     res.json(song);
   });
@@ -36,7 +36,7 @@ exports.view = (req, res) => {
 exports.update = (req, res) => {
   Song.findById(req.params.song_id, (err, song) => {
     if (err) {
-      res.status(422).send('Failed to update DB');
+      return res.status(422).send('Failed to update DB: ' + err.message);
     }
     song.title = req.body.title ? req.body.title : song.title;
     song.title_en = req.body.title_en;
@@ -45,7 +45,7 @@ exports.update = (req, res) => {
 
     song.save(err => {
       if (err) {
-        res.status(422).send('Failed to update DB');
+        return res.status(422).send('Failed to update DB: ' + err.message);
       }
       res.json(song);
     });
@@ -53,11 +53,9 @@ exports.update = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-  Song.deleteOne({
-    _id: req.params.song_id
-  }, err => {
+  Song.deleteOne({_id: req.params.song_id}, err => {
     if (err) {
-      res.status(422).send('Failed to update DB');
+      return res.status(422).send('Failed to update DB: ' + err.message);
     }
     res.end();
   });

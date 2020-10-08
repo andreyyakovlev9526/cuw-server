@@ -22,7 +22,7 @@ exports.new = function (req, res) {
 
 	songList.save(function (err) {
 		if (err)
-			res.json(err);
+			return res.json(err);
 		res.json(songList);
 	});
 };
@@ -30,7 +30,7 @@ exports.new = function (req, res) {
 exports.view = function (req, res) {
 	song_List.findById(req.params.songList_id, function (err, songList) {
 		if (err)
-			res.send(err);
+			return res.send(err);
 		res.json(songList);
 	});
 };
@@ -38,7 +38,7 @@ exports.view = function (req, res) {
 exports.update = function (req, res) {
 	song_List.findById(req.params.songList_id, function (err, songList) {
 		if (err)
-			res.send(err);
+			return res.send(err);
 		songList.songs = req.body.songs ? req.body.songs : songList.songs;
 		songList.date = req.body.date;
 		songList.note = req.body.note;
@@ -46,7 +46,7 @@ exports.update = function (req, res) {
 
 		songList.save(function (err) {
 			if (err)
-				res.json(err);
+				return res.json(err);
 			res.json(songList);
 		});
 	});
@@ -57,7 +57,7 @@ exports.delete = function (req, res) {
 		_id: req.params.songList_id
 	}, function (err, songList) {
 		if (err)
-			res.send(err);
+			return res.send(err);
 		res.json({
 			status: "success"
 		});

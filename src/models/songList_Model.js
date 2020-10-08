@@ -1,21 +1,28 @@
+const { ObjectId } = require('mongodb');
 let mongoose = require('mongoose');
+songModel = require('../models/songModel');
+memberModel = require('../models/memberModel');
 
 const songList_Schema = mongoose.Schema({
-	songs: {
-		type: String,
-		required: true
-	},
+	songs: [
+		{
+			type: ObjectId,
+			ref: 'song',
+		}
+	],
 	date: {
-		type: Date,
-		required: true
+		type: String,
+		required: true,
 	},
 	note: {
-		type: String
-	},
-	members: {
 		type: String,
-		required: true
-	}
+	},
+	members: [
+		{
+			type: ObjectId,
+			ref: 'member',
+		}
+	],
 });
 
 const song_List = module.exports = mongoose.model('songList', songList_Schema);
