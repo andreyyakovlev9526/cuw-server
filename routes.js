@@ -11,18 +11,18 @@ Router.get('/', (req, res) => {
 	res.json({});
 });
 
-Router.route('/member')
+Router.route('/members')
 	.get(memberController.index)
 	.post(memberController.new);
-Router.route('/member/:member_id')
+Router.route('/members/:member_id')
 	.get(memberController.view)
 	.put(memberController.update)
 	.delete(memberController.delete);
 
-Router.route('/song')
+Router.route('/songs')
 	.get(songController.index)
 	.post(songController.new);
-Router.route('/song/:song_id')
+Router.route('/songs/:song_id')
 	.get(songController.view)
 	.put(songController.update)
 	.delete(songController.delete);
@@ -35,10 +35,10 @@ Router.route('/song-list/:songList_id')
 	.put(songList_Controller.update)
 	.delete(songList_Controller.delete);
 
-Router.route('/user')
+Router.route('/admin/users')
 	.get(userController.index)
 	.post(userController.new);
-Router.route('/user/:user_id')
+Router.route('/admin/users/:user_id')
 	.get(userController.view)
 	.put(userController.update)
 	.delete(userController.delete);

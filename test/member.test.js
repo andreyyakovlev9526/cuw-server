@@ -5,9 +5,9 @@ const app = require('../app');
 let memberId;
 
 describe('Member', () => {
+
   let mongoServer;
 
-  // TODO: move to separate file
   beforeAll(async () => {
     mongoServer = new MongoMemoryServer();
     const URI = await mongoServer.getUri();
@@ -18,7 +18,7 @@ describe('Member', () => {
       useUnifiedTopology: true,
     });
   });
-
+  
   afterAll(async done => {
     mongoose.disconnect(done);
     await mongoServer.stop();
