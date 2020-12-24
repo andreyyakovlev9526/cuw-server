@@ -1,4 +1,4 @@
-const Song = require('../models/songModel');
+const Song = require('../models/song');
 
 exports.index = (_req, res) => {
   Song.find({}, (err, songs) => {

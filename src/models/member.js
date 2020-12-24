@@ -9,22 +9,19 @@ const memberSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	skype: {
-		type: String
-	},
 	position: {
 		type: String,
 		required: true
 	},
-	note: {
+	email: {
 		type: String
 	},
-	email: {
+	skype: {
+		type: String
+	},
+	note: {
 		type: String
 	}
 });
 
-const Member = module.exports = mongoose.model('member', memberSchema);
-module.exports.get = function (callback, limit) {
-	Member.find(callback).limit(limit);
-}
+module.exports = mongoose.model('member', memberSchema);

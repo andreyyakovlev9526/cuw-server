@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 let mongoose = require('mongoose');
-songModel = require('../models/songModel');
-memberModel = require('../models/memberModel');
+songModel = require('./song');
+memberModel = require('./member');
 
 const songList_Schema = mongoose.Schema({
 	songs: [

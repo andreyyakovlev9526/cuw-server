@@ -1,69 +1,36 @@
+const check = require('express-validator/check');
+const Member = require('../models/member');
 
-Member = require('../models/memberModel');
-
-exports.index = (req, res) => {
-	Member.find({}, (err, members) => {
-		if (err) {
-			res.json({
-				status: "error",
-				message: err,
-			});
-		}
-		res.json(members);
-	});
+exports.index = async (req, res) => {
+	res.json(await Member.find({}));
 };
 
-exports.new = function (req, res) {
-	const member = new Member();
-	member.name = req.body.name ? req.body.name : member.name;
+exports.createOrUpdate = async (req, res) => {
+	await check.check('name').notEmpty().run(req);
+	await check.check('phone').notEmpty().run(req);
+	await check.check('position').notEmpty().run(req);
+
+	const result = check.validationResult(req);
+	if (!result.isEmpty()) {
+		return res.status(400).json({ errors: result.array() });
+	}
+
+	const member = req.params.id ? await Member.findById(req.params.id) : new Member();
+	member.name = req.body.name;
 	member.phone = req.body.phone;
 	member.skype = req.body.skype;
 	member.position = req.body.position;
 	member.note = req.body.note;
 	member.email = req.body.email;
 
-	member.save(function (err) {
-		if (err)
-			res.json(err);
-		res.json(member);
-	});
+	res.json(await member.save());
 };
 
-exports.view = function (req, res) {
-	Member.findById(req.params.member_id, function (err, member) {
-		if (err)
-			res.send(err);
-		res.json(member);
-	});
+exports.view = async (req, res) => {
+	res.json(await Member.findById(req.params.id));
 };
 
-exports.update = function (req, res) {
-	Member.findById(req.params.member_id, function (err, member) {
-		if (err)
-			res.send(err);
-		member.name = req.body.name ? req.body.name : member.name;
-		member.phone = req.body.phone;
-		member.skype = req.body.skype;
-		member.position = req.body.position;
-		member.note = req.body.note;
-		member.email = req.body.email;
-
-		member.save(function (err) {
-			if (err)
-				res.json(err);
-			res.json(member);
-		});
-	});
-};
-
-exports.delete = function (req, res) {
-	Member.deleteOne({
-		_id: req.params.member_id
-	}, function (err, member) {
-		if (err)
-			res.send(err);
-		res.json({
-			status: "success"
-		});
-	});
+exports.delete = async (req, res) => {
+	await Member.deleteOne({_id: req.params.id});
+	res.json();
 };

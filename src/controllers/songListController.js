@@ -1,5 +1,5 @@
 
-song_List = require('../models/songList_Model');
+song_List = require('../models/songList');
 
 exports.index = function (req, res) {
 	song_List.find({}, function (err, songList) {
