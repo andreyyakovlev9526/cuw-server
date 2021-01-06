@@ -8,12 +8,12 @@ const songSchema = mongoose.Schema({
 	titleEn: {
 		type: String,
 	},
-	// sheets: [
-	// 	{
-	// 		title: String,
-	// 		url: String,
-	// 	}
-	// ],
+	sheets: [
+		{
+			title: String,
+			url: String,
+		}
+	],
 	// samples: [
 	// 	{
 	// 		title: String,
