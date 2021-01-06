@@ -1,6 +1,6 @@
 const memberController = require('./src/controllers/memberController');
 const songController = require('./src/controllers/songController');
-const songList_Controller = require('./src/controllers/songListController');
+const songListController = require('./src/controllers/songListController');
 const userController = require('./src/controllers/userController');
 const Router = require('express').Router();
 
@@ -14,26 +14,26 @@ Router.route('/members/:id')
 
 Router.route('/songs')
 	.get(songController.index)
-	.post(songController.new);
+	.post(songController.createOrUpdate);
 Router.route('/songs/:id')
 	.get(songController.view)
-	.put(songController.update)
+	.put(songController.createOrUpdate)
 	.delete(songController.delete);
 
 Router.route('/song-list')
-	.get(songList_Controller.index)
-	.post(songList_Controller.new);
+	.get(songListController.index)
+	.post(songListController.createOrUpdate);
 Router.route('/song-list/:id')
-	.get(songList_Controller.view)
-	.put(songList_Controller.update)
-	.delete(songList_Controller.delete);
+	.get(songListController.view)
+	.put(songListController.createOrUpdate)
+	.delete(songListController.delete);
 
-Router.route('/admin/users')
+Router.route('/users')
 	.get(userController.index)
-	.post(userController.new);
-Router.route('/admin/users/:id')
+	.post(userController.createOrUpdate);
+Router.route('/users/:id')
 	.get(userController.view)
-	.put(userController.update)
+	.put(userController.createOrUpdate)
 	.delete(userController.delete);
 
 module.exports = Router;

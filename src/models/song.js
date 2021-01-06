@@ -5,7 +5,7 @@ const songSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	title_en: {
+	titleEn: {
 		type: String,
 	},
 	sheets: [
@@ -14,15 +14,12 @@ const songSchema = mongoose.Schema({
 			url: String,
 		}
 	],
-	samples: [
-		{
-			title: String,
-			url: String,
-		}
-	]
+	// samples: [
+	// 	{
+	// 		title: String,
+	// 		url: String,
+	// 	}
+	// ]
 });
 
-const Song = module.exports = mongoose.model('song', songSchema);
-module.exports.get = function (callback, limit) {
-	Song.find(callback).limit(limit);
-}
+module.exports = mongoose.model('song', songSchema);

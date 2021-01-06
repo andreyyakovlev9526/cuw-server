@@ -1,65 +1,34 @@
+const check = require('express-validator/check');
+SongList = require('../models/songList');
 
-song_List = require('../models/songList');
-
-exports.index = function (req, res) {
-	song_List.find({}, function (err, songList) {
-		if (err) {
-			res.json({
-				status: "error",
-				message: err,
-			});
-		}
-		res.json(song_List);
-	});
+exports.index = async (req, res) => {
+	res.json(await SongList.find({}));
 };
 
-exports.new = function (req, res) {
-	const songList = new song_List();
-	songList.songs = req.body.songs ? req.body.songs : songList.songs;
+exports.createOrUpdate = async (req, res) => {
+	// await check.check('songs').notEmpty().run(req);
+	// await check.check('members').notEmpty().run(req);
+	await check.check('date').notEmpty().run(req);
+
+	const result = check.validationResult(req);
+	if (!result.isEmpty()) {
+		return res.status(400).json({ errors: result.array() });
+	}
+
+	const songList = req.params.id ? await SongList.findById(req.params.id) : new SongList();
+	// songList.songs = req.body.songs;
+	// songList.members = req.body.members;
 	songList.date = req.body.date;
 	songList.note = req.body.note;
-	songList.members = req.body.members;
 
-	songList.save(function (err) {
-		if (err)
-			return res.json(err);
-		res.json(songList);
-	});
+	res.json(await songList.save());
 };
 
-exports.view = function (req, res) {
-	song_List.findById(req.params.songList_id, function (err, songList) {
-		if (err)
-			return res.send(err);
-		res.json(songList);
-	});
+exports.view = async (req, res) => {
+	res.json(await SongList.findById(req.params.id));
 };
 
-exports.update = function (req, res) {
-	song_List.findById(req.params.songList_id, function (err, songList) {
-		if (err)
-			return res.send(err);
-		songList.songs = req.body.songs ? req.body.songs : songList.songs;
-		songList.date = req.body.date;
-		songList.note = req.body.note;
-		songList.members = req.body.members;
-
-		songList.save(function (err) {
-			if (err)
-				return res.json(err);
-			res.json(songList);
-		});
-	});
-};
-
-exports.delete = function (req, res) {
-	song_List.deleteOne({
-		_id: req.params.songList_id
-	}, function (err, songList) {
-		if (err)
-			return res.send(err);
-		res.json({
-			status: "success"
-		});
-	});
+exports.delete = async (req, res) => {
+	await SongList.deleteOne({_id: req.params.id});
+	res.json();
 };

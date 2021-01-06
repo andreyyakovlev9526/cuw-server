@@ -1,62 +1,35 @@
+const check = require('express-validator/check');
 const Song = require('../models/song');
 
-exports.index = (_req, res) => {
-  Song.find({}, (err, songs) => {
-    if (err) {
-      return res.status(422).send('Failed to query DB: ' + err.message);
-    }
-    res.json(songs);
-  });
+exports.index = async (req, res) => {
+  res.json(await Song.find({}));
 };
 
-exports.new = (req, res) => {
-  const song = new Song();
+exports.createOrUpdate = async (req, res) => {
+  await check.check('title').notEmpty().run(req);
+  await check.check('titleEn').notEmpty().run(req);
+  await check.check('sheets').notEmpty().run(req);
+  // await check.check('samples').notEmpty().run(req);
+
+  const result = check.validationResult(req);
+  if (!result.isEmpty()) {
+    return res.status(400).json({ errors: result.array() });
+  }
+
+  const song = req.params.id ? await Song.findById(req.params.id) : new Song();
   song.title = req.body.title;
-  song.title_en = req.body.title_en;
+  song.titleEn = req.body.titleEn;
   song.sheets = req.body.sheets;
-  song.samples = req.body.samples;
+  // song.samples = req.body.samples;
 
-  song.save(err => {
-    if (err) {
-      return res.status(422).send('Failed to update DB: ' + err.message);
-    }
-    res.json(song);
-  });
+  res.json(await song.save());
 };
 
-exports.view = (req, res) => {
-  Song.findById(req.params.song_id, (err, song) => {
-    if (err) {
-      return res.status(422).send('Failed to query DB: ' + err.message);
-    }
-    res.json(song);
-  });
+exports.view = async (req, res) => {
+  res.json(await Song.findById(req.params.id));
 };
 
-exports.update = (req, res) => {
-  Song.findById(req.params.song_id, (err, song) => {
-    if (err) {
-      return res.status(422).send('Failed to update DB: ' + err.message);
-    }
-    song.title = req.body.title ? req.body.title : song.title;
-    song.title_en = req.body.title_en;
-    song.sheets = req.body.sheets;
-    song.samples = req.body.samples;
-
-    song.save(err => {
-      if (err) {
-        return res.status(422).send('Failed to update DB: ' + err.message);
-      }
-      res.json(song);
-    });
-  });
-};
-
-exports.delete = (req, res) => {
-  Song.deleteOne({_id: req.params.song_id}, err => {
-    if (err) {
-      return res.status(422).send('Failed to update DB: ' + err.message);
-    }
-    res.end();
-  });
+exports.delete = async (req, res) => {
+  await Song.deleteOne({_id: req.params.id});
+  res.json();
 };
