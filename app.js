@@ -1,4 +1,4 @@
-const { auth } = require('./src/middleware/auth');
+// const { auth } = require('./src/middleware/auth');
 const mongoose = require('mongoose');
 const express = require('express');
 const multer = require('multer')

@@ -2,7 +2,7 @@ const check = require('express-validator/check');
 const Member = require('../models/member');
 
 exports.index = async (req, res) => {
-	res.json(await Member.find({}));
+	res.json(await Member.find());
 };
 
 exports.createOrUpdate = async (req, res) => {

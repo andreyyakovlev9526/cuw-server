@@ -7,7 +7,7 @@ exports.index = async (req, res) => {
 
 exports.createOrUpdate = async (req, res) => {
 	// await check.check('songs').notEmpty().run(req);
-	// await check.check('members').notEmpty().run(req);
+	await check.check('members').notEmpty().run(req);
 	await check.check('date').notEmpty().run(req);
 
 	const result = check.validationResult(req);
@@ -17,7 +17,7 @@ exports.createOrUpdate = async (req, res) => {
 
 	const songList = req.params.id ? await SongList.findById(req.params.id) : new SongList();
 	// songList.songs = req.body.songs;
-	// songList.members = req.body.members;
+	songList.members = req.body.members;
 	songList.date = req.body.date;
 	songList.note = req.body.note;
 

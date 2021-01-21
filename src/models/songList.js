@@ -17,12 +17,12 @@ const songListSchema = mongoose.Schema({
 	note: {
 		type: String,
 	},
-	// members: [
-	// 	{
-	// 		type: ObjectId,
-	// 		ref: 'member',
-	// 	}
-	// ],
+	members: [
+		{
+			type: ObjectId,
+			ref: 'member',
+		}
+	],
 });
 
 module.exports = mongoose.model('songList', songListSchema);

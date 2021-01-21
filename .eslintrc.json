@@ -18,9 +18,7 @@
     "plugins": [
         "react"
     ],
+    "ignorePatterns" : ["*.test.js"],
     "rules": {
-    },
-    "eslintIgnore": [
-        "*.test.js"
-    ]
+    }
 }
