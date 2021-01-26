@@ -1,8 +1,20 @@
 const check = require('express-validator/check');
-SongList = require('../models/songList');
+const SongList = require('../models/songList');
+const Member = require('../models/member');
 
 exports.index = async (req, res) => {
-	res.json(await SongList.find({}));
+	const lists = await SongList.find({});
+	const members = await Member.find({});
+
+	lists.forEach(list => {
+		list.members = list.members ?? [];
+		list.members = list.members.map((memberId) => {
+			const index = members.findIndex(member => member._id.equals(memberId));
+			return members[index];
+		});
+	});
+
+	res.json(lists);
 };
 
 exports.createOrUpdate = async (req, res) => {
