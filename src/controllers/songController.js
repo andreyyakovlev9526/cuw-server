@@ -9,7 +9,7 @@ exports.createOrUpdate = async (req, res) => {
   await check.check('title').notEmpty().run(req);
   await check.check('titleEn').notEmpty().run(req);
   await check.check('sheets').notEmpty().run(req);
-  // await check.check('samples').notEmpty().run(req);
+  await check.check('samples').notEmpty().run(req);
 
   const result = check.validationResult(req);
   if (!result.isEmpty()) {
@@ -20,7 +20,7 @@ exports.createOrUpdate = async (req, res) => {
   song.title = req.body.title;
   song.titleEn = req.body.titleEn;
   song.sheets = req.body.sheets;
-  // song.samples = req.body.samples;
+  song.samples = req.body.samples;
 
   res.json(await song.save());
 };

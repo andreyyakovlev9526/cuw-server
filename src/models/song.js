@@ -14,12 +14,12 @@ const songSchema = mongoose.Schema({
 			url: String,
 		}
 	],
-	// samples: [
-	// 	{
-	// 		title: String,
-	// 		url: String,
-	// 	}
-	// ]
+	samples: [
+		{
+			title: String,
+			url: String,
+		}
+	]
 });
 
 module.exports = mongoose.model('song', songSchema);
