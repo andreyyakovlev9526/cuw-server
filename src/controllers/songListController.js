@@ -1,6 +1,7 @@
 const check = require('express-validator/check');
 const SongList = require('../models/songList');
 const Member = require('../models/member');
+const Song = require('../models/song');
 
 exports.index = async (req, res) => {
 	const lists = await SongList.find({});
@@ -14,11 +15,23 @@ exports.index = async (req, res) => {
 		});
 	});
 
+	// res.json(lists);
+
+	const songs = await Song.find({});
+
+	lists.forEach(list => {
+		list.songs = list.songs ?? [];
+		list.songs = list.songs.map((songId) => {
+			const songIndex = songs.findIndex(song => song._id.equals(songId));
+			return songs[songIndex];
+		});
+	});
+
 	res.json(lists);
 };
 
 exports.createOrUpdate = async (req, res) => {
-	// await check.check('songs').notEmpty().run(req);
+	await check.check('songs').notEmpty().run(req);
 	await check.check('members').notEmpty().run(req);
 	await check.check('date').notEmpty().run(req);
 
@@ -28,7 +41,7 @@ exports.createOrUpdate = async (req, res) => {
 	}
 
 	const songList = req.params.id ? await SongList.findById(req.params.id) : new SongList();
-	// songList.songs = req.body.songs;
+	songList.songs = req.body.songs;
 	songList.members = req.body.members;
 	songList.date = req.body.date;
 	songList.note = req.body.note;

@@ -4,12 +4,12 @@ songModel = require('./song');
 memberModel = require('./member');
 
 const songListSchema = mongoose.Schema({
-	// songs: [
-	// 	{
-	// 		type: ObjectId,
-	// 		ref: 'song',
-	// 	}
-	// ],
+	songs: [
+		{
+			type: ObjectId,
+			ref: 'song',
+		}
+	],
 	date: {
 		type: String,
 		required: true,
