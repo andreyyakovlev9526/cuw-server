@@ -7,9 +7,6 @@ exports.index = async (req, res) => {
 
 exports.createOrUpdate = async (req, res) => {
   await check.check('title').notEmpty().run(req);
-  await check.check('titleEn').notEmpty().run(req);
-  await check.check('sheets').notEmpty().run(req);
-  await check.check('samples').notEmpty().run(req);
 
   const result = check.validationResult(req);
   if (!result.isEmpty()) {

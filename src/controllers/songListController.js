@@ -3,36 +3,32 @@ const SongList = require('../models/songList');
 const Member = require('../models/member');
 const Song = require('../models/song');
 
+const fetchRelations = async (songLists) => {
+	const entities = {
+		members: await Member.find({}),
+		songs: await Song.find({}),
+	};
+
+	const lists = Array.isArray(songLists) ? songLists : [songLists];
+	lists.forEach((songList) => {
+		for (const field of ['members', 'songs']) {
+			songList[field] = songList[field] ?? [];
+			songList[field] = songList[field].map((entityId) => {
+				const index = entities[field].findIndex(entity => entity._id.equals(entityId));
+				return entities[field][index];
+			});
+		}
+	});
+
+	return songLists;
+}
+
 exports.index = async (req, res) => {
-	const lists = await SongList.find({});
-	const members = await Member.find({});
-
-	lists.forEach(list => {
-		list.members = list.members ?? [];
-		list.members = list.members.map((memberId) => {
-			const index = members.findIndex(member => member._id.equals(memberId));
-			return members[index];
-		});
-	});
-
-	// res.json(lists);
-
-	const songs = await Song.find({});
-
-	lists.forEach(list => {
-		list.songs = list.songs ?? [];
-		list.songs = list.songs.map((songId) => {
-			const songIndex = songs.findIndex(song => song._id.equals(songId));
-			return songs[songIndex];
-		});
-	});
-
-	res.json(lists);
+	res.json(await fetchRelations(await SongList.find({})));
 };
 
 exports.createOrUpdate = async (req, res) => {
 	await check.check('songs').notEmpty().run(req);
-	await check.check('members').notEmpty().run(req);
 	await check.check('date').notEmpty().run(req);
 
 	const result = check.validationResult(req);
@@ -46,11 +42,11 @@ exports.createOrUpdate = async (req, res) => {
 	songList.date = req.body.date;
 	songList.note = req.body.note;
 
-	res.json(await songList.save());
+	res.json(await fetchRelations(await songList.save()));
 };
 
 exports.view = async (req, res) => {
-	res.json(await SongList.findById(req.params.id));
+	res.json(await fetchRelations(await SongList.findById(req.params.id)));
 };
 
 exports.delete = async (req, res) => {
